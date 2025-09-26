@@ -83,7 +83,7 @@ docker run -p 8080:8080 --env-file .env payroll-service:latest
 ```
 
 # TEST API
-````bash
+```bash
 docker run --env-file .env -p 8080:8080 payroll-service:latest
 ```
 

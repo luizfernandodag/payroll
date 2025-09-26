@@ -4,11 +4,11 @@ A simple **Payroll Management System** built with **Spring Boot 3.3.x** and **Ja
 
 ## Project Structure
 
-payroll/
-├── src/main/java/com/atdev/payroll/ # Java source code
-├── src/main/resources/ # Configuration files
-├── pom.xml # Maven configuration
-└── README.md # Project documentation
+### payroll/
+#### ├── src/main/java/com/atdev/payroll/ # Java source code
+#### ├── src/main/resources/ # Configuration files
+#### ├── pom.xml # Maven configuration
+#### └── README.md # Project documentation
 
 
 ## Features
@@ -18,6 +18,28 @@ payroll/
 - Email notifications using Spring Boot Starter Mail
 - Built with Lombok to reduce boilerplate code
 - No database required
+
+
+## Prerequisites
+
+- Java 21 (for Maven build)  
+- Maven 3.9+  
+- Docker (for containerized build/run)  
+- `.env` file with environment variables for sensitive data  
+
+### Example `.env` file
+
+```env
+SPRING_APPLICATION_NAME=payroll
+PAYROLL_USER=admin
+PAYROLL_PASSWORD=secret
+SPRING_MAIL_HOST=smtp.gmail.com
+SPRING_MAIL_PORT=587
+SPRING_MAIL_USERNAME=your-email@gmail.com
+SPRING_MAIL_PASSWORD=your-email-password
+SPRING_MAIL_SMTP_AUTH=true
+SPRING_MAIL_SMTP_STARTTLS=true
+```
 # Build the project
 
 To build the project, run:
@@ -41,7 +63,7 @@ To run the application, use:
 ./mvn spring-boot:run
 ```
 
-#Configuration
+# Configuration
 
 spring.mail.host=smtp.example.com
 spring.mail.port=587
@@ -54,4 +76,36 @@ Testing
 ```bash
 mvn test
 ```
+# Build and Run with Docker
+```bash
+docker build -t payroll-service:latest .
+docker run -p 8080:8080 --env-file .env payroll-service:latest
+```
+
+# TEST API
+```
+docker run --env-file .env -p 8080:8080 payroll-service:latest
+```
+
+# Configuration
+
+spring.application.name=${SPRING_APPLICATION_NAME:payroll}
+
+payroll.user=${PAYROLL_USER:admin}
+payroll.password=${PAYROLL_PASSWORD:secret}
+
+spring.mail.host=${SPRING_MAIL_HOST:smtp.gmail.com}
+spring.mail.port=${SPRING_MAIL_PORT:587}
+spring.mail.username=${SPRING_MAIL_USERNAME}
+spring.mail.password=${SPRING_MAIL_PASSWORD}
+spring.mail.properties.mail.smtp.auth=${SPRING_MAIL_SMTP_AUTH:true}
+spring.mail.properties.mail.smtp.starttls.enable=${SPRING_MAIL_SMTP_STARTTLS:true}
+
+# References
+Spring Boot Documentation
+
+Docker Documentation
+
+Maven Documentation
+
 

@@ -83,7 +83,7 @@ docker run -p 8080:8080 --env-file .env payroll-service:latest
 ```
 
 # TEST API
-```
+````bash
 docker run --env-file .env -p 8080:8080 payroll-service:latest
 ```
 
@@ -101,6 +101,12 @@ spring.mail.password=${SPRING_MAIL_PASSWORD}
 spring.mail.properties.mail.smtp.auth=${SPRING_MAIL_SMTP_AUTH:true}
 spring.mail.properties.mail.smtp.starttls.enable=${SPRING_MAIL_SMTP_STARTTLS:true}
 
+
+# Testing
+
+```bash
+mvn test
+```
 # References
 Spring Boot Documentation
 

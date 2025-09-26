@@ -1,22 +1,29 @@
 package com.atdev.payroll.service;
 
-import com.opencsv.CSVReader;
-import com.lowagie.text.Document;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.pdf.PdfPTable;
-import com.lowagie.text.pdf.PdfWriter;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import jakarta.mail.internet.MimeMessage;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.commons.io.IOUtils;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.lowagie.text.Document;
+import com.lowagie.text.Font;
+import com.lowagie.text.Image;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
+import com.opencsv.CSVReader;
+
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class PayrollService {
@@ -27,7 +34,7 @@ public class PayrollService {
         this.mailSender = mailSender;
     }
 
-    public ProcessResult processPayroll(MultipartFile csvFile) throws Exception {
+    public ProcessResult processPayroll(MultipartFile csvFile, String company) throws Exception {
         List<String> sentEmails = new ArrayList<>();
 
         try (CSVReader reader = new CSVReader(new InputStreamReader(csvFile.getInputStream(), StandardCharsets.UTF_8))) {
@@ -37,7 +44,7 @@ public class PayrollService {
             while ((line = reader.readNext()) != null) {
                 if (firstLine) {
                     firstLine = false;
-                    continue; // skip header row
+                    continue; // skip header
                 }
 
                 // CSV order:
@@ -57,30 +64,51 @@ public class PayrollService {
                 String netPayment = line[9].trim();
                 String period = line[10].trim();
 
-                // 1️⃣ Generate PDF in memory with full payroll info
+                // 1️⃣ Generate PDF in memory
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 Document document = new Document();
                 PdfWriter.getInstance(document, baos);
                 document.open();
 
-                document.add(new Paragraph("Payroll Details"));
-                document.add(new Paragraph("Generated on: " + LocalDateTime.now()));
+                // Add logo
+                String logoPath = "logos/" + company + ".png";
+                InputStream logoStream = getClass().getClassLoader().getResourceAsStream(logoPath);
+                if (logoStream == null) {
+                    logoStream = getClass().getClassLoader().getResourceAsStream("logos/default.png");
+                }
+                
+                if (logoStream != null) {
+                    Image logo = Image.getInstance(IOUtils.toByteArray(logoStream));
+                    logo.scaleToFit(120, 50);
+                    document.add(logo);
+                }
+
+                // Add company name from ENV
+                // String companyInfo = System.getenv().getOrDefault("COMPANY_INFO", "FakeClients");
+                
+                String companyInfo = company;
+                document.add(new Paragraph(companyInfo, new Font(Font.HELVETICA, 16, Font.BOLD)));
+                document.add(new Paragraph("Comprobante de pago (" + period + ")"));
+                document.add(new Paragraph(fullName));
+                document.add(new Paragraph(position));
                 document.add(new Paragraph("\n"));
 
+                // Payroll table
                 PdfPTable table = new PdfPTable(2);
-                table.addCell("Full Name"); table.addCell(fullName);
-                table.addCell("Email"); table.addCell(email);
-                table.addCell("Position"); table.addCell(position);
-                table.addCell("Health Discount"); table.addCell(healthDiscount);
-                table.addCell("Social Discount"); table.addCell(socialDiscount);
-                table.addCell("Taxes Discount"); table.addCell(taxesDiscount);
-                table.addCell("Other Discount"); table.addCell(otherDiscount);
-                table.addCell("Gross Salary"); table.addCell(grossSalary);
-                table.addCell("Gross Payment"); table.addCell(grossPayment);
-                table.addCell("Net Payment"); table.addCell(netPayment);
-                table.addCell("Period"); table.addCell(period);
+                table.setWidthPercentage(100);
+
+                table.addCell("Salario bruto"); table.addCell(grossSalary);
+                table.addCell("Pago bruto"); table.addCell(grossPayment);
+
+                table.addCell("SFS"); table.addCell(socialDiscount);
+                table.addCell("AFP"); table.addCell(healthDiscount);
+                table.addCell("ISR"); table.addCell(taxesDiscount);
+                table.addCell("Otros"); table.addCell(otherDiscount);
+
+                table.addCell("Pago neto"); table.addCell(netPayment);
 
                 document.add(table);
+
                 document.close();
 
                 // 2️⃣ Send email with PDF
@@ -89,7 +117,7 @@ public class PayrollService {
                 helper.setTo(email);
                 helper.setSubject("Your Payroll");
                 helper.setText("Hello " + fullName + ",\n\nPlease find attached your payroll PDF.");
-                helper.addAttachment("payroll.pdf", new org.springframework.core.io.ByteArrayResource(baos.toByteArray()));
+                helper.addAttachment("payroll.pdf", new ByteArrayResource(baos.toByteArray()));
 
                 mailSender.send(message);
 

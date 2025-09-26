@@ -27,7 +27,7 @@ public class PayrollController {
             @RequestPart("file") MultipartFile csvFile) {
 
         try {
-            PayrollService.ProcessResult result = payrollService.processPayroll(csvFile);
+            PayrollService.ProcessResult result = payrollService.processPayroll(csvFile, company);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

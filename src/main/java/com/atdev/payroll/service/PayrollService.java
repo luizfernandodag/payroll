@@ -173,5 +173,21 @@ public class PayrollService {
             this.emails = emails;
             this.datetime = datetime;
         }
+
+        public List<String> getEmails() {
+            return emails;
+        }
+
+        public void setEmails(List<String> emails) {
+            this.emails = emails;
+        }
+
+        public String getDatetime() {
+            return datetime;
+        }
+
+        public void setDatetime(String datetime) {
+            this.datetime = datetime;
+        }
     }
 }

@@ -92,7 +92,7 @@ docker run -p 8080:8080 --env-file .env payroll-service:latest
 
 
 ```bash
-curl.exe -X POST "http://localhost:8080/payroll/process?country=<county>&company=<company>" -u <PAYROLL_USER>:<PAYROLL_PASSWORD> -F "file=@<path to payroll.csv>"```
+curl.exe -X POST "http://localhost:8080/payroll/process?country=<country>&company=<company>" -u <PAYROLL_USER>:<PAYROLL_PASSWORD> -F "file=@<path to payroll.csv>"```
 ```
 
 

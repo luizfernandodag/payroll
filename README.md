@@ -40,7 +40,13 @@ SPRING_MAIL_PASSWORD=your-email-password
 SPRING_MAIL_SMTP_AUTH=true
 SPRING_MAIL_SMTP_STARTTLS=true
 ```
-# Build the project
+# Clone and Build the project
+
+```bash
+git clone https://github.com/YOUR-USERNAME/payroll.git
+cd payroll
+
+```
 
 To build the project, run:
 
@@ -49,11 +55,6 @@ To build the project, run:
 ```
 
 
-```bash
-git clone https://github.com/YOUR-USERNAME/payroll.git
-cd payroll
-
-```
 
 Run The App
 

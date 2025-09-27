@@ -84,9 +84,8 @@ docker run -p 8080:8080 --env-file .env payroll-service:latest
 
 # TEST API
 ```bash
-docker run --env-file .env -p 8080:8080 payroll-service:latest
+curl.exe -X POST "http://localhost:8080/payroll/process?country=do&company=atdev" -u admin:secret -F "file=@<path to payroll.csv>"```
 ```
-
 # Configuration
 
 spring.application.name=${SPRING_APPLICATION_NAME:payroll}

@@ -63,15 +63,21 @@ To run the application, use:
 ./mvn spring-boot:run
 ```
 
-# Configuration
+# Configuration - application properties
+```
+spring.application.name=${SPRING_APPLICATION_NAME:payroll}
 
-spring.mail.host=smtp.example.com
-spring.mail.port=587
-spring.mail.username=your-email@example.com
-spring.mail.password=your-password
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.starttls.enable=true
+payroll.user=${PAYROLL_USER:admin}
+payroll.password=${PAYROLL_PASSWORD:secret}
 
+spring.mail.host=${SPRING_MAIL_HOST:smtp.gmail.com}
+spring.mail.port=${SPRING_MAIL_PORT:587}
+spring.mail.username=${SPRING_MAIL_USERNAME}
+spring.mail.password=${SPRING_MAIL_PASSWORD}
+spring.mail.properties.mail.smtp.auth=${SPRING_MAIL_SMTP_AUTH:true}
+spring.mail.properties.mail.smtp.starttls.enable=${SPRING_MAIL_SMTP_STARTTLS:true}
+
+```
 Testing
 ```bash
 mvn test
@@ -97,21 +103,7 @@ curl.exe -X POST "http://localhost:8080/payroll/process?country=<county>&company
 curl.exe -X POST "http://localhost:8080/payroll/process?country=do&company=atdev" -u admin:secret -F "file=@<path to payroll.csv>"```
 ```
 select you county, company, payroll_user, payroll_password on that api call
-# Configuration - application properties
-```
-spring.application.name=${SPRING_APPLICATION_NAME:payroll}
 
-payroll.user=${PAYROLL_USER:admin}
-payroll.password=${PAYROLL_PASSWORD:secret}
-
-spring.mail.host=${SPRING_MAIL_HOST:smtp.gmail.com}
-spring.mail.port=${SPRING_MAIL_PORT:587}
-spring.mail.username=${SPRING_MAIL_USERNAME}
-spring.mail.password=${SPRING_MAIL_PASSWORD}
-spring.mail.properties.mail.smtp.auth=${SPRING_MAIL_SMTP_AUTH:true}
-spring.mail.properties.mail.smtp.starttls.enable=${SPRING_MAIL_SMTP_STARTTLS:true}
-
-```
 # Testing
 
 ```bash

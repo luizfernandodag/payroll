@@ -97,8 +97,8 @@ curl.exe -X POST "http://localhost:8080/payroll/process?country=<county>&company
 curl.exe -X POST "http://localhost:8080/payroll/process?country=do&company=atdev" -u admin:secret -F "file=@<path to payroll.csv>"```
 ```
 select you county, company, payroll_user, payroll_password on that api call
-# Configuration
-
+# Configuration - application properties
+```
 spring.application.name=${SPRING_APPLICATION_NAME:payroll}
 
 payroll.user=${PAYROLL_USER:admin}
@@ -111,7 +111,7 @@ spring.mail.password=${SPRING_MAIL_PASSWORD}
 spring.mail.properties.mail.smtp.auth=${SPRING_MAIL_SMTP_AUTH:true}
 spring.mail.properties.mail.smtp.starttls.enable=${SPRING_MAIL_SMTP_STARTTLS:true}
 
-
+```
 # Testing
 
 ```bash

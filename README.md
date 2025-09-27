@@ -89,6 +89,13 @@ docker run -p 8080:8080 --env-file .env payroll-service:latest
 curl.exe -X POST "http://localhost:8080/payroll/process?country=<county>&company=<company>" -u <PAYROLL_USER>:<PAYROLL_PASSWORD> -F "file=@<path to payroll.csv>"```
 ```
 
+
+# TEST API EXAMPLE
+
+
+```bash
+curl.exe -X POST "http://localhost:8080/payroll/process?country=do&company=atdev" -u admin:secret -F "file=@<path to payroll.csv>"```
+```
 select you county, company, payroll_user, payroll_password on that api call
 # Configuration
 

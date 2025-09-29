@@ -43,7 +43,7 @@ SPRING_MAIL_SMTP_STARTTLS=true
 # Clone and Build the project
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/payroll.git
+git clone https://github.com/luizfernandodag/payroll.git
 cd payroll
 
 ```
